@@ -15,7 +15,6 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/timeout';
 
 import {ServerConfigs} from '../_models/configFile';
-
 import {Body} from "@angular/http/src/body";
 
 
@@ -103,7 +102,7 @@ export class RestService {
     restGet_getUserData(userId: string,token:string):Observable<any> {
 
         let headers = new Headers();
-        headers.append('Accept', '*,application/json');
+        headers.append('Accept', 'application/json');
         //headers.append('Content-type', 'application/json');
         headers.append('Authorization','Bearer ' + token);
 
@@ -140,15 +139,15 @@ export class RestService {
     }
 
 
-    //get user application form entries -get
+    //get user application form entries
     restGet_formObject(userId: string, token:string):Observable<any> {
 
         let headers = new Headers();
-        headers.append('Accept', '*,application/json');
+        headers.append('Accept', 'application/json');
         headers.append('Authorization','Bearer ' + token); //'Authorization':'Bearer '
 
         console.log("in restService,auth_getFormObject: user=",userId);
-        return this.http.get(this.serverURL + '/@types/student'              //url req-main
+        return this.http.get(this.serverURL + '/applications/'+ userId +'/'+userId              //url req-main
                                                                             //url req-sub
             ,{headers:headers}  // ,({headers: new Headers({'Authorization':token}) }) //({'Authorization':'Bearer ' + token})                                          //header
             //.retry(1)
@@ -159,17 +158,18 @@ export class RestService {
 
     }
 
-    //update user
-    restPost_formObject(userId: string,token:string,form:any):Observable<any> {
+    //patch user application form entries
+    restPatch_formObject(userId: string,token:string,form:any):Observable<any> {
 
         let headers = new Headers();
-        headers.append('Content-type', 'application/json');
+        //headers.append('Content-type', 'application/json');
+        headers.append('Accept', 'application/json');
         headers.append('Authorization','Bearer ' + token); //'Authorization':'Bearer '
 
         let body = JSON.stringify(form);
 
         //console.log("in restService,auth_getFormObject: user=",user);
-        return this.http.post(this.serverURL + '/@types/student/'                                        //url req-main
+        return this.http.patch(this.serverURL + '/applications/'+ userId +'/'+userId                                        //url req-main
             ,body                                                                            //(userData)                                                                        //body
             ,{headers:headers} //,({headers: new Headers({'Authorization':token}) })                               //({'Authorization':'Bearer ' + token})                 //header
             //.retry(1)

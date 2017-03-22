@@ -1,44 +1,32 @@
-import { Inject ,Injectable} from '@angular/core';
+import { Inject } from '@angular/core';
 
-import { WindowRefService } from '../_services/windowRef.service';
+var port = 8443;
 
 const dbgPrint = false;
-var port = 8443;
 
 
 export var constSrvUrl:any;
 
-//@Component({}) //empty component decorator, used for webpack-compiling error 'Constructors for derived classes must contain a 'super' call.'
-@Injectable()
-export class ServerConfigs{
-  private _window: Window;
+export class ServerConfigs {
 
     /*
-      restServer_ip : 'localhost',
-      restServer_port:  '8080',
-      fileUploadServer_ip : 'localhost',
-      fileUploadServer_port : '8080',
+  restServer_ip : 'localhost',
+  restServer_port:  '8080',
+  fileUploadServer_ip : 'localhost',
+  fileUploadServer_port : '8080',
 
-      //restServer: 'efv-stage.tcs.ifi.lmu.de:8080/Plone',
-      restServer: 'https://localhost' + ':' + port,
-      fileUploadServer: 'https://localhost' + ':' + port
+
+    //restServer: 'efv-stage.tcs.ifi.lmu.de:8080/Plone',
+    restServer: 'https://localhost' + ':' + port,
+    fileUploadServer: 'https://localhost' + ':' + port
     */
 
     private serverURL : string;
     private host : string;
 
-
-    constructor(windowRef: WindowRefService)
+    constructor(@Inject(Window) private _window: Window)
     {
-
-      this._window = windowRef.nativeWindow;
-
-    //constructor(@Inject('Window') windowRef: Window)
-    //{
-
-      //this._window = windowRef;
-
-        this.host = this._window.location.toString();
+        this.host = _window.location.toString();
 
         var splitString = this.host.split('/');
         console.log("splitString=",splitString);
@@ -49,6 +37,7 @@ export class ServerConfigs{
 
         if (dbgPrint) console.log("host_port=",host_port);
 
+        /*
 
         var host = "";
         var port = "";
@@ -59,13 +48,21 @@ export class ServerConfigs{
         }
         else host = splitString[2];
 
+        */
+
+        var host = '192.168.159.130:8080';
+
+        var port;
         if (protocol == 'http:')
             port = '8080';
         else
             port = '8443';
 
-        this.serverURL = protocol + '//' + host + ':' + port + '/Plone';
 
+        //this.serverURL = protocol + '//' + host + ':' + port + '/Plone';
+
+
+        this.serverURL = protocol + '//' + host + '/Plone';
 
         if (dbgPrint)  console.log("serverURL=",this.serverURL);
 

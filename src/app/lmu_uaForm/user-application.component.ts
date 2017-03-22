@@ -207,6 +207,9 @@ export class UserApplicationComponent implements OnInit {
 
 		this.uasubmit = false;
 
+    var cookies = document.cookie;
+
+    console.log("cookies = ",document.cookie);
 
 		/*
 		this._router.events.subscribe(path => {

@@ -29,7 +29,7 @@ const dbgPrint = false;
 const dbgPrint_user = false;
 const dbgPrint_login = false;
 const dbgPrint_setFormObj = true;
-const dbgPrint_getFormObj = false;
+const dbgPrint_getFormObj = true;
 
 
 @Injectable()
@@ -112,7 +112,7 @@ export class AuthenticationService {
                         this.setCurrentToken_local(token);
                         this._currentUserId = userId;
 
-                        this.auth_getFormObject();
+                        //this.auth_getFormObject();
 
                         //this.setProgressValue(100);
                         this.setProgressMode('determinate');
@@ -377,15 +377,20 @@ export class AuthenticationService {
     auth_setFormObj(uaObj:any,sendToServer:boolean=false)
     {
         //console.log("In authService, auth_setFormObj 1:given uaObj=",uaObj);
-        if (typeof uaObj !== 'object') uaObj = JSON.parse(uaObj) ;
 
-        this._currentFormObj = uaObj;
+        var tmpUaObj = "";
+        if (uaObj.subFormGroup_apd[0] != undefined) tmpUaObj = uaObj.subFormGroup_apd[0];
+        else tmpUaObj = uaObj;   //.subFormGroup_apd;
 
-        if (dbgPrint_setFormObj)console.log("In authService, auth_setFormObj 2 ,this._currentFormObj=",this._currentFormObj);
+        if (typeof tmpUaObj !== 'object') uaObj = JSON.parse(tmpUaObj) ;
+
+        this._currentFormObj = tmpUaObj;
+
+        if (dbgPrint_setFormObj)console.log("In authService, auth_setFormObj 2 ,tmpUaObj=",tmpUaObj);
 
 
         //Important --> localStorage use json-format
-            let tmpString: string = JSON.stringify(uaObj);
+            let tmpString: string = JSON.stringify(tmpUaObj);
             tmpString = tmpString.replace(/\//g, '-');
             if (dbgPrint_setFormObj) console.log("In auth_setFormObj, tmpString",tmpString);
 
@@ -407,7 +412,7 @@ export class AuthenticationService {
 
         //var localStorage_formObj = localStorage.getItem('currentUaObject');
 
-        this._rtRestService.restPost_formObject(this._currentUserId,this._currentToken,this._currentFormObj)
+        this._rtRestService.restPatch_formObject(this._currentUserId,this._currentToken,this._currentFormObj)
             .subscribe(
                 (data) => {console.log("set UaObj to server successfull with data=",data)}, //this.data = data, // Reach here if res.status >= 200 && <= 299
                 (err) => {console.log("set UaObj to server failure , err=",err)}); // Reach here if fails;

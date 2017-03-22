@@ -198,6 +198,11 @@ export class AppComponent implements OnDestroy{
 
         _authenticationService.getProgressValue().subscribe((value) => this.progressBar_value = value);
         _authenticationService.getProgressMode().subscribe((mode) => this.progressBar_mode = mode);
+
+        var cookies = document.cookie;
+
+        console.log("cookies = ",cookies);
+
 	}
 
 
